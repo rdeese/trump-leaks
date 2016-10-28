@@ -9,10 +9,15 @@ import os
 # GET TRUMP SPEECHES, BUILD MARKOV MODEL
 # Get raw text as string.
 with open("speeches.txt") as f:
-  text = f.read()
+  trump_text = f.read()
+with open("civis-corpus.txt") as f:
+  civis_text = f.read()
 
-# Build the model.
-trump = markovify.Text(text)
+
+# Build the models.
+trump_model = markovify.Text(trump_text)
+civis_model = markovify.Text(civis_text)
+combo_model = markovify.combine([trump_model, civis_model], [1, 1.5])
 
 ### GET CIVIS EMPLOYEE NAMES
 page = requests.get('https://civisanalytics.com/team/')
@@ -38,10 +43,12 @@ cwd = os.getcwd()
 
 for email_number in range(10):
   recipient = random.choice(civis_people)
+  split = recipient.split()
+  recipient = filter(str.isalnum, (split[0][0] + split[-1])).lower() + "@civisanalytics.com"
 
-  sender = "Donald J. Trump"
+  sender = "realDonaldTrump@trump.com"
 
-  title = trump.make_short_sentence(50)
+  title = combo_model.make_short_sentence(100)
   while random.randint(0,1) == 1:
     title = "Re: " + title
 
@@ -51,7 +58,7 @@ for email_number in range(10):
   body = ""
   for paragraph in range(random.randrange(2, 5, 1)):
     for sentence in range(random.randrange(3,10,1)):
-      body += trump.make_sentence()
+      body += combo_model.make_sentence()
       body += " "
     body += "\n\n"
 

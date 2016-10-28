@@ -43,6 +43,12 @@
 	\rule[0.5ex]{\linewidth}{#1}\par
 }
 
+% Custom Document Formatting
+\newcommand\bigdecorativeline[1][1pt]{
+	\par\noindent%
+	\rule[2ex]{\linewidth}{#1}\par
+}
+
 % Set the Paper Size and margins
 \RequirePackage{geometry}
 \geometry{margin=1.0in}
@@ -54,18 +60,18 @@
 	\ifthenelse{\equal{\@memologo}{\relax}}{}
 	{ % Create With Logo
 	\begin{minipage}[t]{1\columnwidth}%
-		\begin{flushright}
+		\begin{center}
 			\vspace{-0.6in}
 			\@memologo
 			\vspace{0.5in}
-		\par\end{flushright}%
+		\par\end{center}%
 	\end{minipage}
 	}
   {
     \LARGE
     \ifthenelse{\equal{\@memosubject}{\relax}}{}{\@memosubject}
   }
-	\decorativeline{}
+	\bigdecorativeline{}
 	% To, From, Subject Block
 	\begin{description}
 		\ifthenelse{\equal{\@memoto}{\relax}}{}{\item [{To:}] \@memoto}
