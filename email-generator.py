@@ -4,7 +4,6 @@ import time
 from lxml import html
 import requests
 import os
-import glob
 
 ###
 # GET TRUMP SPEECHES, BUILD MARKOV MODEL
@@ -42,7 +41,7 @@ for email_number in range(10):
 
   sender = "Donald J. Trump"
 
-  title = trump.make_short_sentence(100)
+  title = trump.make_short_sentence(50)
   while random.randint(0,1) == 1:
     title = "Re: " + title
 
@@ -67,3 +66,6 @@ for email_number in range(10):
   outfile = open(out_name, 'w')
   outfile.write(email)
   outfile.close()
+
+os.system("latexmk -xelatex -outdir=output tex/*.tex")
+os.system("mv output/*.pdf pdfs")
