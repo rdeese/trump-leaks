@@ -15,8 +15,8 @@ with open("civis-corpus.txt") as f:
 
 
 # Build the models.
-trump_model = markovify.Text(trump_text)
-civis_model = markovify.Text(civis_text)
+trump_model = markovify.Text(trump_text, state_size=3)
+civis_model = markovify.Text(civis_text, state_size=3)
 combo_model = markovify.combine([trump_model, civis_model], [1, 1.5])
 
 ### GET CIVIS EMPLOYEE NAMES
@@ -41,14 +41,14 @@ with open('email-template.tex', 'r') as file :
 
 cwd = os.getcwd()
 
-for email_number in range(10):
+for email_number in range(30):
   recipient = random.choice(civis_people)
   split = recipient.split()
-  recipient = filter(str.isalnum, (split[0][0] + split[-1])).lower() + "@civisanalytics.com"
+  recipient = filter(str.isalnum, (split[0][0] + split[1])).lower() + "@civisanalytics.com"
 
   sender = "realDonaldTrump@trump.com"
 
-  title = combo_model.make_short_sentence(100)
+  title = combo_model.make_short_sentence(100, tries=100)
   while random.randint(0,1) == 1:
     title = "Re: " + title
 
@@ -58,7 +58,7 @@ for email_number in range(10):
   body = ""
   for paragraph in range(random.randrange(2, 5, 1)):
     for sentence in range(random.randrange(3,10,1)):
-      body += combo_model.make_sentence()
+      body += combo_model.make_sentence(tries=100)
       body += " "
     body += "\n\n"
 
